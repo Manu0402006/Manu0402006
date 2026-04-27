@@ -12,11 +12,13 @@ import jwt
 from typing import List, Optional
 from datetime import datetime, timezone, timedelta
 
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, Query
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, Query, BackgroundTasks
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
+
+from email_service import send_order_emails
 
 # ---------------------------------------------------------------------------
 # DB & App init
@@ -280,7 +282,7 @@ def _calculate_totals(items: List[OrderItem], discount_code: Optional[str]):
 
 
 @api.post("/orders", response_model=Order)
-async def create_order(payload: OrderIn):
+async def create_order(payload: OrderIn, background: BackgroundTasks):
     if not payload.items:
         raise HTTPException(status_code=400, detail="Cart is empty")
     subtotal, discount_amount, shipping_fee, total = _calculate_totals(
@@ -299,6 +301,13 @@ async def create_order(payload: OrderIn):
     doc = order.model_dump()
     doc["created_at"] = doc["created_at"].isoformat()
     await db.orders.insert_one(doc)
+
+    # Fire-and-forget email notifications (never blocks/breaks the order)
+    email_payload = order.model_dump()
+    email_payload["customer"] = order.customer.model_dump()
+    email_payload["items"] = [i.model_dump() for i in order.items]
+    background.add_task(send_order_emails, email_payload)
+
     return order
 
 
