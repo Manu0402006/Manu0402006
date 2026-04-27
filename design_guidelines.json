@@ -1,0 +1,164 @@
+{
+  "project_name": "Cynos",
+  "theme": "dark",
+  "archetype": "Archetype 4 (Swiss & High-Contrast / Brutalist Streetwear)",
+  "design_philosophy": "Premium, minimal, modern. Bold streetwear aesthetic using stark contrasts, brutalist typography, and aggressive asymmetry. It should feel like a high-end streetwear drop (Nike SNKRS / Supreme vibes), not a generic dropshipping store.",
+  "colors": {
+    "background": {
+      "primary": "#050505",
+      "secondary": "#121212",
+      "surface": "#1A1A1A",
+      "overlay": "rgba(5, 5, 5, 0.6)"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "inverse": "#050505",
+      "accent": "#FF3333"
+    },
+    "border": {
+      "default": "#27272A",
+      "subtle": "rgba(255, 255, 255, 0.05)",
+      "accent": "#FF3333"
+    },
+    "brand": {
+      "primary": "#FFFFFF",
+      "accent": "#FF3333",
+      "success": "#22C55E",
+      "warning": "#F59E0B"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "primary_heading": "Anton, sans-serif",
+      "secondary_heading": "Cabinet Grotesk, sans-serif",
+      "body": "Manrope, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scale": {
+      "h1": "text-5xl sm:text-7xl lg:text-8xl tracking-tight uppercase",
+      "h2": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter uppercase",
+      "h3": "text-2xl sm:text-3xl tracking-tight uppercase",
+      "h4": "text-lg sm:text-xl font-bold tracking-wide",
+      "body_large": "text-lg leading-relaxed",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm tracking-wider uppercase",
+      "micro": "text-xs tracking-[0.2em] uppercase font-mono"
+    },
+    "rules": {
+      "headings": "Always tight tracking, uppercase for impact. Do not center everything; prefer stark left alignment with large margins.",
+      "body": "High readability, neutral colors (Zinc-400 for secondary)."
+    }
+  },
+  "spacing_and_layout": {
+    "container_padding": "px-4 md:px-8 lg:px-12",
+    "section_spacing": "py-24 md:py-32",
+    "border_radius": "rounded-none",
+    "grid_system": "Bento Grid (Mode A: Tetris) for categories and lookbooks. Asymmetrical, masonry-style grids. Gap-4 to Gap-8.",
+    "buttons": "Large hit areas. py-4 px-8. Sharp edges (rounded-none).",
+    "cards": "Flat solid background, 1px subtle border (#27272A). No soft shadows. Use sharp, brutalist 1px borders."
+  },
+  "components": {
+    "navigation": {
+      "style": "Glassmorphism with extreme blur (backdrop-blur-2xl) but 0px radius. Fixed to top, z-50. Minimal links, massive logo. 1px bottom border.",
+      "components_used": "HTML/Tailwind + Lucide React for icons."
+    },
+    "hero": {
+      "style": "Full-bleed background image with bg-black/40 overlay. Massive typography (H1 'WEAR YOUR ATTITUDE') breaking standard grids. CTA is high-contrast white on black or red on white.",
+      "features": "Include a marquee or small mono-font trust badges at the absolute bottom of the hero."
+    },
+    "buttons": {
+      "primary": "bg-white text-black font-bold uppercase tracking-wider hover:bg-zinc-200 transition-colors py-4 px-8 rounded-none border-none",
+      "accent": "bg-[#FF3333] text-white font-bold uppercase tracking-wider hover:bg-red-600 transition-colors py-4 px-8 rounded-none",
+      "secondary": "bg-transparent text-white border border-white/20 hover:border-white transition-all py-4 px-8 rounded-none",
+      "whatsapp": "Fixed bottom-right corner. bg-[#25D366] text-white rounded-full p-4 shadow-lg hover:scale-110 transition-transform z-50"
+    },
+    "product_cards": {
+      "style": "Image-heavy. 1px border. Dark gray background. Title, price, and 'Buy Now' button appear boldly on hover.",
+      "badges": "Absolute positioned tags. Red for 'Limited Stock', White for 'Trending'. Mono font, small text, padding p-1 px-2."
+    },
+    "marquee": {
+      "style": "Kinetic texture. Use react-fast-marquee. Massive outline text (text-8xl text-transparent border-white/10 style) in the background for offers.",
+      "library": "react-fast-marquee"
+    },
+    "modals_drawers": {
+      "style": "Use Shadcn Sheet for Cart Drawer. Use Shadcn Dialog for Size Guide. Sharp corners, dark overlay.",
+      "libraries": "Shadcn UI"
+    }
+  },
+  "motion_and_interactions": {
+    "hover": "High contrast shifts. Images should scale up slightly (scale-105) on hover within an overflow-hidden container.",
+    "page_load": "Fade up text staggers.",
+    "libraries": "framer-motion for page transitions and staggering. lenis for momentum scrolling."
+  },
+  "image_urls": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1763750581767-b367bcd6c117?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHwxfHxvdmVyc2l6ZWQlMjBzdHJlZXR3ZWFyJTIwdC1zaGlydCUyMG1vZGVsJTIwZGFya3xlbnwwfHx8fDE3NzczMTQ2NTJ8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Main hero background, dark atmospheric streetwear model with sunglasses.",
+      "category": "hero"
+    },
+    "product_bestseller_1": {
+      "url": "https://images.pexels.com/photos/28758240/pexels-photo-28758240.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Full-body oversized streetwear mockup.",
+      "category": "product"
+    },
+    "product_bestseller_2": {
+      "url": "https://images.pexels.com/photos/37014370/pexels-photo-37014370.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Model with printed graphic oversized t-shirt.",
+      "category": "product"
+    },
+    "product_anime_1": {
+      "url": "https://images.pexels.com/photos/9637851/pexels-photo-9637851.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Anime graphic tee model.",
+      "category": "product"
+    },
+    "category_couples": {
+      "url": "https://images.pexels.com/photos/11871927/pexels-photo-11871927.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Couple wearing matching graphic shirts.",
+      "category": "category_cover"
+    },
+    "category_women": {
+      "url": "https://images.unsplash.com/photo-1776466333828-bdf98c44eaf3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY2luZW1hdGljJTIwdXJiYW4lMjBmYXNoaW9uJTIwbmlnaHR8ZW58MHx8fHwxNzc3MzE0NjY2fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Cinematic dark fashion woman.",
+      "category": "category_cover"
+    },
+    "category_men": {
+      "url": "https://images.unsplash.com/photo-1721352490417-3e96bbf0ba84?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHw0fHxvdmVyc2l6ZWQlMjBzdHJlZXR3ZWFyJTIwdC1zaGlydCUyMG1vZGVsJTIwZGFya3xlbnwwfHx8fDE3NzczMTQ2NTJ8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Men's streetwear cover.",
+      "category": "category_cover"
+    },
+    "gallery_1": {
+      "url": "https://images.pexels.com/photos/19101424/pexels-photo-19101424.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Instagram gallery urban anime look.",
+      "category": "gallery"
+    },
+    "texture_overlay": {
+      "url": "https://images.pexels.com/photos/1171480/pexels-photo-1171480.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Black grunge texture for offer banner backgrounds.",
+      "category": "background"
+    }
+  },
+  "specific_features": {
+    "whatsapp_integration": "Include a sticky WhatsApp icon (Lucide or react-icons) linked to 'https://wa.me/9810153152'. Color #25D366.",
+    "trust_badges": "Place below the Hero and on the Product Page. Use Phosphor Icons or Lucide (e.g., Truck for free shipping, CurrencyInr for COD, ArrowUUpLeft for Returns).",
+    "exit_intent_popup": "10% OFF discount code 'CYNOS10'. Dark dialog with a sharp red accent button.",
+    "urgency_timers": "Product page should have a 'Sale ends in XX:XX:XX' red mono text.",
+    "social_proof": "A small floating toast at bottom-left corner 'Rahul from Delhi just bought an Anime Tee' - use Framer Motion for entrance.",
+    "sticky_buy_now": "On mobile, Product page must have a sticky bottom bar with price and 'Buy Now' button."
+  },
+  "testing": {
+    "data_test_attributes": "Add data-testid to ALL interactive elements (e.g., data-testid='hero-shop-button', data-testid='add-to-cart-btn', data-testid='whatsapp-chat-btn'). Use kebab-case."
+  },
+  "instructions_to_main_agent": [
+    "Build the website using React + TailwindCSS + Shadcn UI.",
+    "Ensure all Shadcn components (Cards, Dialogs, Sheets, Buttons) are heavily modified to remove rounded corners (use rounded-none) to match the brutalist streetwear aesthetic.",
+    "Do NOT use generic standard fonts. Use Anton for H1/H2 (add via Google Fonts in index.html/App.css) and Manrope for body text.",
+    "Use Phosphor icons or Lucide React for UI iconography.",
+    "Add 'framer-motion' for all micro-interactions (hover reveals, dialog open animations).",
+    "For the 'Buy 2 Get 1 Free' banner, use 'react-fast-marquee' with a scrolling text layer over the dark texture image.",
+    "Do NOT use placeholder images from via.placeholder.com. Use ONLY the URLs provided in the image_urls section.",
+    "Use pure HTML/Tailwind grids for the Bento-style category sections. Do not rely on Shadcn cards for complex marketing layouts.",
+    "Data structure for products should include standard e-commerce fields (id, name, price, original_price, images, category, badges, description). Mock this data elegantly.",
+    "Ensure the UI defaults to DARK mode and the background is strictly #050505 or #0A0A0A."
+  ]
+}
