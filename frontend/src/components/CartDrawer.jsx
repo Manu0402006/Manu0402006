@@ -52,9 +52,9 @@ const CartDrawer = () => {
                       <div className="font-anton text-lg mt-1">{formatINR(it.price)}</div>
                       <div className="flex items-center gap-3 mt-2">
                         <div className="flex items-center border border-white/20">
-                          <button onClick={() => updateQty(it.product_id, it.size, it.qty - 1)} className="px-2 py-1 hover:bg-white/10" aria-label="decrease"><Minus size={12} /></button>
+                          <button onClick={() => updateQty(it.product_id, it.size, it.qty - 1)} className="px-2 py-1 hover:bg-white/10" aria-label="decrease" data-testid={`qty-minus-${it.slug}`}><Minus size={12} /></button>
                           <span className="px-3 font-mono text-xs">{it.qty}</span>
-                          <button onClick={() => updateQty(it.product_id, it.size, it.qty + 1)} className="px-2 py-1 hover:bg-white/10" aria-label="increase"><Plus size={12} /></button>
+                          <button onClick={() => updateQty(it.product_id, it.size, it.qty + 1)} className="px-2 py-1 hover:bg-white/10" aria-label="increase" data-testid={`qty-plus-${it.slug}`}><Plus size={12} /></button>
                         </div>
                         <button onClick={() => removeItem(it.product_id, it.size)} className="text-zinc-500 hover:text-cynos-red ml-auto" aria-label="remove">
                           <Trash2 size={14} />

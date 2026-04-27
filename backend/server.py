@@ -509,7 +509,7 @@ SAMPLE_PRODUCTS = [
             "https://images.pexels.com/photos/9637851/pexels-photo-9637851.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=940",
             "https://images.pexels.com/photos/19101424/pexels-photo-19101424.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=940",
         ],
-        "badges": ["New"], "stock_count": 30, "is_bestseller": False,
+        "badges": ["New"], "stock_count": 30, "is_bestseller": True,
         "rating": 4.5, "review_count": 64,
     },
 ]
