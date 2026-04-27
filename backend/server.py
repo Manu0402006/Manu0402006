@@ -19,6 +19,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 
 from email_service import send_order_emails
+from qikink_service import push_order as qikink_push_order
 
 # ---------------------------------------------------------------------------
 # DB & App init
@@ -117,6 +118,8 @@ class ProductBase(BaseModel):
     is_bestseller: bool = False
     rating: float = 4.7
     review_count: int = 0
+    qikink_sku: Optional[str] = ""
+    qikink_designs: List[dict] = Field(default_factory=list)
 
 
 class ProductIn(ProductBase):
@@ -169,6 +172,9 @@ class Order(BaseModel):
     shipping_fee: float = 0
     total: float
     status: str = "pending"  # pending | confirmed | shipped | delivered | cancelled
+    qikink_order_id: Optional[str] = None
+    qikink_status: Optional[str] = None  # ok | error | disabled | not_attempted
+    qikink_error: Optional[str] = None
     created_at: datetime = Field(default_factory=now_utc)
 
 
@@ -302,13 +308,38 @@ async def create_order(payload: OrderIn, background: BackgroundTasks):
     doc["created_at"] = doc["created_at"].isoformat()
     await db.orders.insert_one(doc)
 
-    # Fire-and-forget email notifications (never blocks/breaks the order)
+    # Build Qikink SKU map for this order's products (so push runs in background)
+    product_ids = [i.product_id for i in payload.items]
+    products = await db.products.find(
+        {"id": {"$in": product_ids}}, {"_id": 0, "id": 1, "qikink_sku": 1, "qikink_designs": 1}
+    ).to_list(50)
+    sku_map = {
+        p["id"]: {"qikink_sku": p.get("qikink_sku", ""), "qikink_designs": p.get("qikink_designs") or []}
+        for p in products
+    }
+
+    # Email + Qikink fulfilment in background — order remains valid even if either fails
     email_payload = order.model_dump()
     email_payload["customer"] = order.customer.model_dump()
     email_payload["items"] = [i.model_dump() for i in order.items]
     background.add_task(send_order_emails, email_payload)
+    background.add_task(_push_to_qikink_and_record, email_payload, sku_map)
 
     return order
+
+
+async def _push_to_qikink_and_record(order_dict: dict, sku_map: dict):
+    """Background task: push order to Qikink, record result on the order doc."""
+    try:
+        result = qikink_push_order(order_dict, sku_map)
+        update = {
+            "qikink_status": "ok" if result["ok"] else (result.get("error") or "error"),
+            "qikink_order_id": result.get("qikink_order_id"),
+            "qikink_error": None if result["ok"] else (result.get("error") or "")[:200],
+        }
+        await db.orders.update_one({"id": order_dict["id"]}, {"$set": update})
+    except Exception as e:  # noqa: BLE001
+        logger.error("qikink record failed: %s", e)
 
 
 @api.get("/orders/{order_id}", response_model=Order)
@@ -404,6 +435,40 @@ async def admin_stats(admin=Depends(get_current_admin)):
         "pending_orders": pending,
         "revenue": round(revenue, 2),
     }
+
+
+@api.get("/admin/qikink/ping")
+async def admin_qikink_ping(admin=Depends(get_current_admin)):
+    """Test Qikink credentials by fetching a fresh access token."""
+    from qikink_service import _get_access_token, _is_enabled, _base_url
+    if not _is_enabled():
+        return {"ok": False, "error": "QIKINK_ENABLED is false"}
+    token = _get_access_token(force=True)
+    return {"ok": bool(token), "base_url": _base_url(), "token_preview": (token[:12] + "...") if token else None}
+
+
+@api.post("/admin/orders/{order_id}/qikink/retry")
+async def admin_qikink_retry(order_id: str, admin=Depends(get_current_admin)):
+    """Manually re-push an order to Qikink (e.g. after fixing SKU mappings)."""
+    o = await db.orders.find_one({"id": order_id}, {"_id": 0})
+    if not o:
+        raise HTTPException(status_code=404, detail="Order not found")
+    product_ids = [i["product_id"] for i in o["items"]]
+    products = await db.products.find(
+        {"id": {"$in": product_ids}}, {"_id": 0, "id": 1, "qikink_sku": 1, "qikink_designs": 1}
+    ).to_list(50)
+    sku_map = {
+        p["id"]: {"qikink_sku": p.get("qikink_sku", ""), "qikink_designs": p.get("qikink_designs") or []}
+        for p in products
+    }
+    result = qikink_push_order(o, sku_map)
+    update = {
+        "qikink_status": "ok" if result["ok"] else (result.get("error") or "error"),
+        "qikink_order_id": result.get("qikink_order_id"),
+        "qikink_error": None if result["ok"] else str(result.get("error") or "")[:200],
+    }
+    await db.orders.update_one({"id": order_id}, {"$set": update})
+    return result
 
 
 # ---------------------------------------------------------------------------

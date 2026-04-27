@@ -226,6 +226,8 @@ const ProductDialog = ({ initial, onClose, onSaved }) => {
         is_bestseller: !!data.is_bestseller,
         rating: Number(data.rating || 4.7),
         review_count: Number(data.review_count || 0),
+        qikink_sku: data.qikink_sku || "",
+        qikink_designs: data.qikink_designs || [],
       };
       if (isEdit) await api.put(`/admin/products/${initial.id}`, payload);
       else await api.post("/admin/products", payload);
@@ -264,6 +266,13 @@ const ProductDialog = ({ initial, onClose, onSaved }) => {
             />
           </div>
           <Input label="Badges (comma-separated, e.g. Trending, Limited Stock)" value={data.badges.join(", ")} onChange={(v) => update("badges", v.split(",").map(s => s.trim()).filter(Boolean))} testid="prod-badges" />
+          <div className="border-t border-white/10 pt-3 mt-3">
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-cynos-red mb-2">Qikink Fulfilment</div>
+            <Input label="Qikink SKU (from your Qikink dashboard catalog)" value={data.qikink_sku || ""} onChange={(v) => update("qikink_sku", v)} testid="prod-qikink-sku" />
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mt-1">
+              Leave empty to skip Qikink for this product. Add the SKU once you've created the product in dashboard.qikink.com.
+            </p>
+          </div>
           <label className="flex items-center gap-2 mt-2">
             <input type="checkbox" checked={!!data.is_bestseller} onChange={(e) => update("is_bestseller", e.target.checked)} className="accent-cynos-red w-4 h-4" data-testid="prod-bestseller" />
             <span className="font-mono text-xs uppercase tracking-[0.2em]">Mark as bestseller</span>
